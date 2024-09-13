@@ -48,7 +48,7 @@ function compararPrevisao(dados, a, b) {
     console.log(`Erro relativo médio: ${erroRelativoMedio.toFixed(2)}%`)
 }
 
-const { dataset1 } = require('./dados')
+const { dataset1, dataset2, dataset3, dataset4, dataset5, dataset6 } = require('./dados')
 const resultado = calcularMinimosQuadrados(dataset1)
 
 console.log('------------------------------')

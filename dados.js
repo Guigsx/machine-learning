@@ -76,4 +76,4 @@ const dataset6 = [
     { peso: 60, altura: 170 }
 ]
 
-module.exports = {dataset1}
+module.exports = { dataset1, dataset2, dataset3, dataset4, dataset5, dataset6 }
