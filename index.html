@@ -10,15 +10,43 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <h1>Resultados da Previsão de Altura</h1>
+    <section>
+        <div class="first">
+            <label for="datasetSelect">Escolha um dataset:</label>
+            <select id="datasetSelect">
+                <option value="dataset1" selected>Dataset 1</option>
+                <option value="dataset2">Dataset 2</option>
+                <option value="dataset3">Dataset 3</option>
+                <option value="dataset4">Dataset 4</option>
+                <option value="dataset5">Dataset 5</option>
+                <option value="dataset6">Dataset 6</option>
+            </select>
+        </div>
+        <h4>Resultados:</h4>
 
-    <div id="equacao"></div>
-    <div id="resultados"></div>
-    <div id="erroMedio"></div>
+        <div id="equacao"></div>
+        <br>
+        <h3>Teste com as outras 3 pessoas:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Peso Real (kg)</th>
+                    <th>Altura Prevista (cm)</th>
+                    <th>Altura Real (cm)</th>
+                    <th>Erro Relativo (%)</th>
+                </tr>
+            </thead>
+            <tbody id="resultadosTabela"></tbody>
+        </table>
+        <div id="erroMedio"></div>
+    </section>
 
+    <script src="dados.js"></script>
     <script src="index.js"></script>
 </body>
 

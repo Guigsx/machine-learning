@@ -1,68 +1,91 @@
 // Função para calcular os mínimos quadrados
 function calcularMinimosQuadrados(dados) {
-    const amostra = dados.slice(0, 7);
+    console.log('Calculando mínimos quadrados com dados:', dados)
+    
+    const amostra = dados.slice(0, 7)
 
-    const numberAmostra = amostra.length;
-    let somaX = 0, somaY = 0, somaXY = 0, somaX2 = 0;
+    const numberAmostra = amostra.length
+    let somaX = 0, somaY = 0, somaXY = 0, somaX2 = 0
 
     amostra.forEach(dado => {
-        somaX += dado.peso;
-        somaY += dado.altura;
-        somaXY += dado.peso * dado.altura;
-        somaX2 += dado.peso * dado.peso;
-    });
+        somaX += dado.peso
+        somaY += dado.altura
+        somaXY += dado.peso * dado.altura
+        somaX2 += dado.peso * dado.peso
+    })
 
-    const a = (numberAmostra * somaXY - somaX * somaY) / (numberAmostra * somaX2 - somaX * somaX);
-    const b = (somaY - a * somaX) / numberAmostra;
+    // Formula
+    const a = (numberAmostra * somaXY - somaX * somaY) / (numberAmostra * somaX2 - somaX * somaX)
+    const b = (somaY - a * somaX) / numberAmostra
 
-    return { a, b };
+    return { a, b }
 }
 
 // Função para prever a altura com base no peso
 function preverAltura(peso, a, b) {
-    return a * peso + b;
+    return a * peso + b
 }
 
 // Função para calcular o erro relativo
 function erroRelativo(alturaReal, alturaPrevista) {
-    return Math.abs(alturaReal - alturaPrevista) / alturaReal * 100;
+    return Math.abs(alturaReal - alturaPrevista) / alturaReal * 100
 }
 
 // Função para comparar os resultados e exibir no HTML
 function compararPrevisao(dados, a, b) {
-    const restantes = dados.slice(7);
-    let somaErroRelativo = 0;
-    let resultadosHTML = '';
+    const restantes = dados.slice(7)
+    let somaErroRelativo = 0
+    let resultadosHTML = ''
 
-    restantes.forEach(dado => {
-        const alturaPrevista = preverAltura(dado.peso, a, b);
-        const erro = erroRelativo(dado.altura, alturaPrevista);
-        somaErroRelativo += erro;
+    restantes.forEach((dado, index) => {
+        const alturaPrevista = preverAltura(dado.peso, a, b)
+        const erro = erroRelativo(dado.altura, alturaPrevista)
+        somaErroRelativo += erro
 
-        resultadosHTML += `<p>Peso real: ${dado.peso}, Altura prevista: ${alturaPrevista.toFixed(2)}, Altura real: ${dado.altura}, Erro relativo: ${erro.toFixed(2)}%</p>`;
-    });
+        resultadosHTML += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${dado.peso}</td>
+                <td>${alturaPrevista.toFixed(2)}</td>
+                <td>${dado.altura}</td>
+                <td>${erro.toFixed(2)}%</td>
+            </tr>
+        `
+    })
 
-    const erroRelativoMedio = somaErroRelativo / restantes.length;
-    document.getElementById('resultados').innerHTML = resultadosHTML;
-    document.getElementById('erroMedio').innerHTML = `<p>Erro relativo médio: ${erroRelativoMedio.toFixed(2)}%</p>`;
+    const erroRelativoMedio = somaErroRelativo / restantes.length
+    document.getElementById('resultadosTabela').innerHTML = resultadosHTML
+    document.getElementById('erroMedio').innerHTML = `<p>Erro relativo médio: <strong>${erroRelativoMedio.toFixed(2)}%</strong></p>`
 }
 
-const dataset1 = [
-    { peso: 57, altura: 167 },
-    { peso: 65, altura: 174 },
-    { peso: 98.0, altura: 163 },
-    { peso: 83, altura: 170 },
-    { peso: 75, altura: 175 },
-    { peso: 57, altura: 167 },
-    { peso: 82.1, altura: 174 },
-    { peso: 51, altura: 163 },
-    { peso: 120, altura: 180 },
-    { peso: 60, altura: 156 }
-]
+// Função para atualizar os resultados com o dataset selecionado
+function atualizarResultados() {
+    const datasetName = document.getElementById('datasetSelect').value
+    console.log('Dataset selecionado:', datasetName)
+    
+    const datasets = {
+        'dataset1': dataset1,
+        'dataset2': dataset2,
+        'dataset3': dataset3,
+        'dataset4': dataset4,
+        'dataset5': dataset5,
+        'dataset6': dataset6,
+    }
 
-// Calcula os coeficientes a e b
-const resultado = calcularMinimosQuadrados(dataset1)
+    const dataset = datasets[datasetName]
+    console.log('Dados do dataset selecionado:', dataset)
 
-document.getElementById('equacao').innerHTML = `<p>A equação da reta é: y = ${resultado.a.toFixed(2)}x + ${resultado.b.toFixed(2)}</p>`
+    if (dataset && dataset.length > 0) {
+        const resultado = calcularMinimosQuadrados(dataset)
+        document.getElementById('equacao').innerHTML = `<p>A equação da reta é: <strong>y = ${resultado.a.toFixed(2)}x + ${resultado.b.toFixed(2)}</strong></p>`
+        compararPrevisao(dataset, resultado.a, resultado.b)
+    } else {
+        console.error('Dataset não encontrado ou vazio')
+    }
+}
 
-compararPrevisao(dataset1, resultado.a, resultado.b)
+// Adiciona um listener para quando o conteúdo da página for carregado
+document.addEventListener('DOMContentLoaded', function() {
+    atualizarResultados()
+    document.getElementById('datasetSelect').addEventListener('change', atualizarResultados)
+})
